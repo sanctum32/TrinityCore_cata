@@ -49,6 +49,7 @@ INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`,
 -- 3 min respawn, old value - 7200s (2 hours)
 UPDATE `creature` SET `spawntimesecs`=180 WHERE  `guid`=255728 AND `id`=36399;
 UPDATE `creature` SET `spawntimesecs`=180 WHERE  `guid`=255724 AND `id`=36397;
+update `creature` SET `spawntimesecs`=180 where `id` = 36283;
 
 -- Condition for spell "Toss Keg"(69094)
 DELETE FROM `conditions` WHERE (`SourceTypeOrReferenceId` = 17) AND (`SourceEntry` IN (69094));
