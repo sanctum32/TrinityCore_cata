@@ -11,19 +11,19 @@ INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`,
 
 DELETE FROM `quest_request_items` WHERE `ID` = 14098;
 INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
-(14098, 0, 0, 'Have you succeeded, $N?', 0);
+(14098, 0, 0, 'Have you succeeded, $n?', 0);
 
 DELETE FROM `quest_request_items` WHERE `ID` = 14266;
 INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
-(14266, 0, 0, 'You\'re a quick study, $N. Don\'t get overconfident, though.', 0);
+(14266, 0, 0, 'You\'re a quick study, $n. Don\'t get overconfident, though.', 0);
 
 DELETE FROM `quest_request_items` WHERE `ID` = 14218;
 INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
-(14218, 0, 0, 'We must take out as many of them as we can, $N.', 0);
+(14218, 0, 0, 'We must take out as many of them as we can, $n.', 0);
 
 DELETE FROM `quest_request_items` WHERE `ID` = 14222;
 INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
-(14222, 0, 0, 'We can do this, $N.', 0);
+(14222, 0, 0, 'We can do this, $n.', 0);
 
 DELETE FROM `quest_request_items` WHERE `ID` = 14347;
 INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
@@ -35,11 +35,11 @@ INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`,
 
 DELETE FROM `quest_request_items` WHERE `ID` = 14369;
 INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
-(14369, 0, 0, 'Did you take care of the Forsaken scum, $N?', 0);
+(14369, 0, 0, 'Did you take care of the Forsaken scum, $n?', 0);
 
 DELETE FROM `quest_request_items` WHERE `ID` = 14382;
 INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
-(14382, 0, 0, 'You\'re back, $N. How\'s the situation outside?', 0);
+(14382, 0, 0, 'You\'re back, $n. How\'s the situation outside?', 0);
 
 DELETE FROM `quest_request_items` WHERE `ID` = 14368;
 INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
@@ -47,11 +47,63 @@ INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`,
 
 DELETE FROM `quest_request_items` WHERE `ID` = 14386;
 INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
-(14386, 0, 0, 'Is it done yet, $N?', 0);
+(14386, 0, 0, 'Is it done yet, $n?', 0);
 
 DELETE FROM `quest_request_items` WHERE `ID` = 14416;
 INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
-(14416, 0, 0, 'You\'re back, $N.', 0);
+(14416, 0, 0, 'You\'re back, $n.', 0);
+
+DELETE FROM `quest_offer_reward` WHERE `ID` = 14275;
+INSERT INTO `quest_offer_reward` (`ID`, `Emote1`, `EmoteDelay1`, `Emote2`, `EmoteDelay2`, `Emote3`, `EmoteDelay3`, `Emote4`, `EmoteDelay4`, `RewardText`, `VerifiedBuild`) VALUES
+(14275, 0, 0, 0, 0, 0, 0, 0, 0, '$n!  I knew you had to be around here.', 0);
+
+DELETE FROM `quest_request_items` WHERE `ID` = 14276;
+INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
+(14276, 0, 0, 'You\'re a fast learner.  We\'ll show these worgen whi the real hunters are.', 0);
+
+DELETE FROM `quest_offer_reward` WHERE `ID` = 14276;
+INSERT INTO `quest_offer_reward` (`ID`, `Emote1`, `EmoteDelay1`, `Emote2`, `EmoteDelay2`, `Emote3`, `EmoteDelay3`, `Emote4`, `EmoteDelay4`, `RewardText`, `VerifiedBuild`) VALUES
+(14276, 0, 0, 0, 0, 0, 0, 0, 0, 'Excellent work, $n.  These worgen will regret ever setting foot in our lands.', 0);
+
+DELETE FROM `quest_offer_reward` WHERE `ID` = 14269;
+INSERT INTO `quest_offer_reward` (`ID`, `Emote1`, `EmoteDelay1`, `Emote2`, `EmoteDelay2`, `Emote3`, `EmoteDelay3`, `Emote4`, `EmoteDelay4`, `RewardText`, `VerifiedBuild`) VALUES
+(14269, 0, 0, 0, 0, 0, 0, 0, 0, 'Oh, hey! There you are!', 0);
+
+DELETE FROM `quest_request_items` WHERE `ID` = 14272;
+INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
+(14272, 0, 0, 'Keep your head down and maybe the worgen will go for some other poor fool instead of us.', 0);
+
+DELETE FROM `quest_offer_reward` WHERE `ID` = 14272;
+INSERT INTO `quest_offer_reward` (`ID`, `Emote1`, `EmoteDelay1`, `Emote2`, `EmoteDelay2`, `Emote3`, `EmoteDelay3`, `Emote4`, `EmoteDelay4`, `RewardText`, `VerifiedBuild`) VALUES
+(14272, 0, 0, 0, 0, 0, 0, 0, 0, 'Don\'t get ahead of yourself now. Just remember who taught you everything you know.$B$BAnd now let\'s see if we can get out of this city with our skins attached.', 0);
+
+DELETE FROM `quest_offer_reward` WHERE `ID` = 14278;
+INSERT INTO `quest_offer_reward` (`ID`, `Emote1`, `EmoteDelay1`, `Emote2`, `EmoteDelay2`, `Emote3`, `EmoteDelay3`, `Emote4`, `EmoteDelay4`, `RewardText`, `VerifiedBuild`) VALUES
+(14278, 0, 0, 0, 0, 0, 0, 0, 0, 'The Light is with you, $n. It\'s still quite a relief to see you.', 0);
+
+DELETE FROM `quest_request_items` WHERE `ID` = 14279;
+INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
+(14279, 0, 0, 'You are learning swiftly, my dear.', 0);
+
+DELETE FROM `quest_offer_reward` WHERE `ID` = 14279;
+INSERT INTO `quest_offer_reward` (`ID`, `Emote1`, `EmoteDelay1`, `Emote2`, `EmoteDelay2`, `Emote3`, `EmoteDelay3`, `Emote4`, `EmoteDelay4`, `RewardText`, `VerifiedBuild`) VALUES
+(14279, 0, 0, 0, 0, 0, 0, 0, 0, 'You are blessed, $n. The Light shines upon you, even in these dark times.', 0);
+
+DELETE FROM `quest_request_items` WHERE `ID` = 14281;
+INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
+(14281, 0, 0, 'I always knew you were a quick study!', 0);
+
+DELETE FROM `quest_offer_reward` WHERE `ID` = 14273;
+INSERT INTO `quest_offer_reward` (`ID`, `Emote1`, `EmoteDelay1`, `Emote2`, `EmoteDelay2`, `Emote3`, `EmoteDelay3`, `Emote4`, `EmoteDelay4`, `RewardText`, `VerifiedBuild`) VALUES
+(14273, 0, 0, 0, 0, 0, 0, 0, 0, 'A darkness has descended over our lands. And not our kind of darkness, if you know what I mean.', 0);
+
+DELETE FROM `quest_request_items` WHERE `ID` = 14274;
+INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
+(14274, 0, 0, 'You\'re doing well, $n.', 0);
+
+DELETE FROM `quest_offer_reward` WHERE `ID` = 14274;
+INSERT INTO `quest_offer_reward` (`ID`, `Emote1`, `EmoteDelay1`, `Emote2`, `EmoteDelay2`, `Emote3`, `EmoteDelay3`, `Emote4`, `EmoteDelay4`, `RewardText`, `VerifiedBuild`) VALUES
+(14274, 0, 0, 0, 0, 0, 0, 0, 0, 'Yes! You can feel the power, can\'t you?', 0);
 
 -- Respawn time correction
 -- 180s (3 min) respawn, old value - 7200s (2 hours)
@@ -79,8 +131,11 @@ UPDATE `quest_template` SET `Flags` = `Flags`|65536 WHERE `ID` = 14375;
 -- Quest chains
 UPDATE `quest_template_addon` SET `PrevQuestID` = 14397 WHERE `ID` = 14403;
 UPDATE `quest_template_addon` SET `PrevQuestID` = 14397 WHERE `ID` = 14398;
-UPDATE `quest_template_addon` SET `PrevQuestID` = 14397, `ExclusiveGroup` = 0 WHERE `ID` = 14406;
+UPDATE `quest_template_addon` SET `PrevQuestID` = 14397 /*, `ExclusiveGroup` = 0*/ WHERE `ID` = 14406;
 UPDATE `quest_template_addon` SET `PrevQuestID` = 14416 WHERE `ID` = 14463;
+UPDATE `quest_template_addon` SET `PrevQuestID` = 14400/*, `ExclusiveGroup` = 0*/ WHERE `ID` = 14401;
+UPDATE `quest_template_addon` SET `ExclusiveGroup` = 0 WHERE `ID` = 14465;
+UPDATE `quest_template_addon` SET `PrevQuestID` = 14401 WHERE `ID` = 14402;
 
 -- Duplicate warrior trainer gossip
 DELETE FROM `gossip_menu_option` WHERE `MenuID` = 10694;
@@ -88,6 +143,32 @@ INSERT INTO `gossip_menu_option` (`MenuID`, `OptionID`, `OptionIcon`, `OptionTex
 (10694, 0, 3, 'I require warrior training.', 3147, 5, 16, 0, 0, 0, 0, NULL, 0, 15595);
 DELETE FROM `conditions` WHERE (`SourceTypeOrReferenceId` = 15) AND (`SourceGroup` IN (10694));
 
+-- corrected phase for "Grandma's Good Clothes"
+UPDATE `gameobject` SET `PhaseId`=183 WHERE  `guid`=236357 AND `id`=196472;
+
+-- Hunter trainer - Gilneas city
+UPDATE `creature_trainer` SET `MenuID`=10697, `OptionID`=1 WHERE  `CreatureID`=35874 AND `MenuID`=0 AND `OptionID`=3;
+DELETE FROM `gossip_menu_option` WHERE `MenuID`=10697 AND `OptionID`=1;
+INSERT INTO `gossip_menu_option` (`MenuID`, `OptionID`, `OptionIcon`, `OptionText`, `OptionBroadcastTextID`, `OptionType`, `OptionNpcflag`, `ActionMenuID`, `ActionPoiID`, `BoxCoded`, `BoxMoney`, `BoxText`, `BoxBroadcastTextID`, `VerifiedBuild`) VALUES
+(10697, 1, 3, 'Train me!', 3266, 5, 16, 0, 0, 0, 0, NULL, 0, 0);
+
+-- Rogue trainer - Gilneas city
+UPDATE `creature_trainer` SET `MenuID`=10699, `OptionID`=1 WHERE `CreatureID`=35871 AND `MenuID`=0 AND `OptionID`=3;
+DELETE FROM `gossip_menu_option` WHERE `MenuID`=10699 AND `OptionID`=1;
+INSERT INTO `gossip_menu_option` (`MenuID`, `OptionID`, `OptionIcon`, `OptionText`, `OptionBroadcastTextID`, `OptionType`, `OptionNpcflag`, `ActionMenuID`, `ActionPoiID`, `BoxCoded`, `BoxMoney`, `BoxText`, `BoxBroadcastTextID`, `VerifiedBuild`) VALUES
+(10699, 1, 3, 'Train me!', 3266, 5, 16, 0, 0, 0, 0, NULL, 0, 0);
+
+-- Mage trainer - Gilneas city
+DELETE FROM `gossip_menu_option` WHERE  `MenuID`=10698 AND `OptionID`=1;
+
+-- Warlock trainer - Gilneas city
+UPDATE `creature_trainer` SET `MenuID`=10702, `OptionID`=1 WHERE  `CreatureID`=35869 AND `MenuID`=0 AND `OptionID`=3;
+DELETE FROM `gossip_menu_option` WHERE `MenuID`=10702 AND `OptionID`=1;
+INSERT INTO `gossip_menu_option` (`MenuID`, `OptionID`, `OptionIcon`, `OptionText`, `OptionBroadcastTextID`, `OptionType`, `OptionNpcflag`, `ActionMenuID`, `ActionPoiID`, `BoxCoded`, `BoxMoney`, `BoxText`, `BoxBroadcastTextID`, `VerifiedBuild`) VALUES
+(10702, 1, 3, 'Train me!', 3266, 5, 16, 0, 0, 0, 0, NULL, 0, 0);
+
+-- 14463,
+-- 14402 <- set
 -- ---------------------
 -- Quest 14416
 -- ---------------------
