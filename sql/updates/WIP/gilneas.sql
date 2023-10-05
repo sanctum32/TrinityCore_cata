@@ -25,6 +25,37 @@ DELETE FROM `quest_request_items` WHERE `ID` = 14222;
 INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
 (14222, 0, 0, 'We can do this, $N.', 0);
 
+DELETE FROM `quest_request_items` WHERE `ID` = 14347;
+INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
+(14347, 0, 0, 'These blaggards aren\'t so tough now, are they?', 0);
+
+DELETE FROM `quest_request_items` WHERE `ID` = 14348;
+INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
+(14348, 0, 0, 'They just keep coming, don\'t they?', 0);
+
+DELETE FROM `quest_request_items` WHERE `ID` = 14369;
+INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
+(14369, 0, 0, 'Did you take care of the Forsaken scum, $N?', 0);
+
+DELETE FROM `quest_request_items` WHERE `ID` = 14382;
+INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
+(14382, 0, 0, 'You\'re back, $N. How\'s the situation outside?', 0);
+
+DELETE FROM `quest_request_items` WHERE `ID` = 14368;
+INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
+(14368, 0, 0, 'I... I don\'t know if I can go on without them.', 0);
+
+-- Respawn time correction
+-- 3 min respawn, old value - 7200s (2 hours)
+UPDATE `creature` SET `spawntimesecs`=180 WHERE  `guid`=255728 AND `id`=36399;
+UPDATE `creature` SET `spawntimesecs`=180 WHERE  `guid`=255724 AND `id`=36397;
+
+-- Condition for spell "Toss Keg"(69094)
+DELETE FROM `conditions` WHERE (`SourceTypeOrReferenceId` = 17) AND (`SourceEntry` IN (69094));
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry`, `SourceId`, `ElseGroup`, `ConditionTypeOrReference`, `ConditionTarget`, `ConditionValue1`, `ConditionValue2`, `ConditionValue3`, `NegativeCondition`, `Comment`) VALUES
+(17, 0, 69094, 0, 0, 31, 1, 3, 36231, 0, 0, 'Should target only Horrid Abomination (36231)');
+
+-- TODO: need to confirm
 UPDATE `quest_template` SET `Flags` = `Flags`|65536 WHERE `ID` = 14375;
 
 -- Duplicate warrior trainer gossip
