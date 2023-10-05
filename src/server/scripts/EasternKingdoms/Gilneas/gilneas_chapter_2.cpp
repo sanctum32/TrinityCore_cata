@@ -247,7 +247,7 @@ struct npc_gilneas_save_the_children : public ScriptedAI
                 scheduler.Schedule(2500ms, [this](TaskContext const& /*task*/)
                 {
                     Talk(SAY_CHILD_RESCUED, ObjectAccessor::GetPlayer(*me, playerGUID));
-                    scheduler.Schedule(me->GetEntry() == NPC_JAMES ? 3600ms : 2300ms, [this](TaskContext const& task)
+                    scheduler.Schedule(me->GetEntry() == NPC_JAMES ? 3600ms : 2300ms, [this](TaskContext const& /*task*/)
                     {
                         switch (me->GetEntry())
                         {
