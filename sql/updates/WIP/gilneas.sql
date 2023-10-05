@@ -55,12 +55,18 @@ INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`,
 
 -- Respawn time correction
 -- 180s (3 min) respawn, old value - 7200s (2 hours)
-UPDATE `creature` SET `spawntimesecs`=180 WHERE  `guid`=255728 AND `id`=36399;
-UPDATE `creature` SET `spawntimesecs`=180 WHERE  `guid`=255724 AND `id`=36397;
-update `creature` SET `spawntimesecs`=180 where `id` IN (36283, 36312, 36440, 36540);
+update `creature` SET `spawntimesecs`=180 where `id` IN
+(
+    36283,  -- Forsaken Catapult
+    36312,  -- Dark Ranger Thyala
+    36440,  -- Drowning Watchman
+    36540,  -- Mountain Horse
+    36397,  -- Captain Anson
+    36399   -- Captain Morris
+);
 
 -- Condition for spell "Toss Keg"(69094)
-DELETE FROM `conditions` WHERE (`SourceTypeOrReferenceId` = 17) AND (`SourceEntry` IN (69094));
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId` = 17 AND `SourceEntry` = 69094;
 INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry`, `SourceId`, `ElseGroup`, `ConditionTypeOrReference`, `ConditionTarget`, `ConditionValue1`, `ConditionValue2`, `ConditionValue3`, `NegativeCondition`, `Comment`) VALUES
 (17, 0, 69094, 0, 0, 31, 1, 3, 36231, 0, 0, 'Should target only Horrid Abomination (36231)');
 
