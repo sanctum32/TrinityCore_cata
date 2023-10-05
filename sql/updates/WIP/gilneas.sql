@@ -105,6 +105,22 @@ DELETE FROM `quest_offer_reward` WHERE `ID` = 14274;
 INSERT INTO `quest_offer_reward` (`ID`, `Emote1`, `EmoteDelay1`, `Emote2`, `EmoteDelay2`, `Emote3`, `EmoteDelay3`, `Emote4`, `EmoteDelay4`, `RewardText`, `VerifiedBuild`) VALUES
 (14274, 0, 0, 0, 0, 0, 0, 0, 0, 'Yes! You can feel the power, can\'t you?', 0);
 
+DELETE FROM `quest_offer_reward` WHERE `ID` = 14285;
+INSERT INTO `quest_offer_reward` (`ID`, `Emote1`, `EmoteDelay1`, `Emote2`, `EmoteDelay2`, `Emote3`, `EmoteDelay3`, `Emote4`, `EmoteDelay4`, `RewardText`, `VerifiedBuild`) VALUES
+(14285, 0, 0, 0, 0, 0, 0, 0, 0, 'You\'ve done well in coming here. If we Gilneans stick together we might yet defeat this terrible enemy.', 0);
+
+DELETE FROM `quest_offer_reward` WHERE `ID` = 14290;
+INSERT INTO `quest_offer_reward` (`ID`, `Emote1`, `EmoteDelay1`, `Emote2`, `EmoteDelay2`, `Emote3`, `EmoteDelay3`, `Emote4`, `EmoteDelay4`, `RewardText`, `VerifiedBuild`) VALUES
+(14290, 0, 0, 0, 0, 0, 0, 0, 0, 'You\'ve done well in coming here.  If we Gilneans stick together we might yet defeat this terrible enemy.', 0);
+
+DELETE FROM `quest_offer_reward` WHERE `ID` = 14289;
+INSERT INTO `quest_offer_reward` (`ID`, `Emote1`, `EmoteDelay1`, `Emote2`, `EmoteDelay2`, `Emote3`, `EmoteDelay3`, `Emote4`, `EmoteDelay4`, `RewardText`, `VerifiedBuild`) VALUES
+(14289, 0, 0, 0, 0, 0, 0, 0, 0, 'You\'ve done well in coming here. If we Gilneans stick together we might yet defeat this terrible enemy.', 0);
+
+DELETE FROM `quest_offer_reward` WHERE `ID` = 14287;
+INSERT INTO `quest_offer_reward` (`ID`, `Emote1`, `EmoteDelay1`, `Emote2`, `EmoteDelay2`, `Emote3`, `EmoteDelay3`, `Emote4`, `EmoteDelay4`, `RewardText`, `VerifiedBuild`) VALUES
+(14287, 0, 0, 0, 0, 0, 0, 0, 0, 'You\'ve done well in coming here. If we Gilneans stick together we might yet defeat this terrible enemy.', 0);
+
 -- Respawn time correction
 -- 180s (3 min) respawn, old value - 7200s (2 hours)
 update `creature` SET `spawntimesecs`=180 where `id` IN
