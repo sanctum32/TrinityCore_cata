@@ -493,26 +493,27 @@ enum TheHungryEattin
 
 struct npc_gilneas_mountain_horse_qtrigger : public PassiveAI
 {
-    npc_gilneas_mountain_horse_qtrigger(Creature* creature) : PassiveAI(creature),
-        castTimer(5500)
+    npc_gilneas_mountain_horse_qtrigger(Creature* creature) : PassiveAI(creature)
     {
+    }
+
+    void Reset() override
+    {
+        scheduler.CancelAll();
+        scheduler.Schedule(5500ms, [this](TaskContext castEvent)
+        {
+            DoCastSelf(SPELL_MOUNTAIN_HORSE_DUMMY, true);
+            castEvent.Repeat();
+        });
     }
 
     void UpdateAI(uint32 diff) override
     {
-        if (castTimer <= diff)
-        {
-            DoCastSelf(SPELL_MOUNTAIN_HORSE_DUMMY, true);
-            castTimer = 5500;
-        }
-        else
-        {
-            castTimer -= diff;
-        }
+        scheduler.Update(diff);
     }
 
 private:
-    uint32 castTimer;
+    TaskScheduler scheduler;
 };
 
 // 68916 Mountain Horse Dummy
@@ -520,27 +521,24 @@ class spell_gilneas_mountain_horse_dummy : public SpellScript
 {
     void HandleDummy(SpellEffIndex /*effIndex*/)
     {
-        if (Creature* horse = GetHitCreature())
-        {
-            if (Unit* owner = horse->GetCharmerOrOwner())
-            {
-                owner->RemoveAurasDueToSpell(SPELL_ROPE_VISUAL);
-            }
+        Creature* horse = GetHitCreature();
+        if (horse == nullptr)
+            return;
 
-            horse->CastSpell(horse, SPELL_MOUNTAIN_HORSE_CREDIT);
+        if (Unit* owner = horse->GetCharmerOrOwner())
+            owner->RemoveAurasDueToSpell(SPELL_ROPE_VISUAL);
 
-            if (Vehicle* pVehicle = horse->GetVehicleKit())
-            {
-                pVehicle->RemoveAllPassengers();
-            }
+        horse->CastSpell(horse, SPELL_MOUNTAIN_HORSE_CREDIT);
 
-            MotionMaster* motion = horse->GetMotionMaster();
-            motion->Clear();
-            motion->MoveIdle();
+        if (Vehicle* vehicle = horse->GetVehicleKit())
+            vehicle->RemoveAllPassengers();
 
-            horse->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
-            horse->DespawnOrUnsummon(5s);
-        }
+        MotionMaster* motion = horse->GetMotionMaster();
+        motion->Clear();
+        motion->MoveIdle();
+
+        horse->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
+        horse->DespawnOrUnsummon(5s);
     }
 
     void Register()
