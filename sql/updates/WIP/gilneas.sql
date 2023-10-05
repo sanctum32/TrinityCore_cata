@@ -57,7 +57,7 @@ INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`,
 -- 180s (3 min) respawn, old value - 7200s (2 hours)
 UPDATE `creature` SET `spawntimesecs`=180 WHERE  `guid`=255728 AND `id`=36399;
 UPDATE `creature` SET `spawntimesecs`=180 WHERE  `guid`=255724 AND `id`=36397;
-update `creature` SET `spawntimesecs`=180 where `id` IN (36283, 36312, 36440);
+update `creature` SET `spawntimesecs`=180 where `id` IN (36283, 36312, 36440, 36540);
 
 -- Condition for spell "Toss Keg"(69094)
 DELETE FROM `conditions` WHERE (`SourceTypeOrReferenceId` = 17) AND (`SourceEntry` IN (69094));
@@ -82,3 +82,39 @@ INSERT INTO `gossip_menu_option` (`MenuID`, `OptionID`, `OptionIcon`, `OptionTex
 (10694, 0, 3, 'I require warrior training.', 3147, 5, 16, 0, 0, 0, 0, NULL, 0, 15595);
 DELETE FROM `conditions` WHERE (`SourceTypeOrReferenceId` = 15) AND (`SourceGroup` IN (10694));
 
+-- ---------------------
+-- Quest 14416
+-- ---------------------
+
+-- 68916 Mountain Horse Dummy
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=13 AND `SourceGroup`=1 AND `SourceEntry`=68916;
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry`, `SourceId`, `ElseGroup`, `ConditionTypeOrReference`, `ConditionTarget`, `ConditionValue1`, `ConditionValue2`, `ConditionValue3`, `NegativeCondition`, `ErrorType`, `ErrorTextId`, `ScriptName`, `Comment`) VALUES
+(13, 1, 68916, 0, 0, 31, 0, 3, 36540, 0, 0, 0, 0, '', 'Mountain Horse Dummy - Can target Mountain Horse'),
+(13, 1, 68916, 0, 1, 31, 0, 3, 36555, 0, 0, 0, 0, '', 'Mountain Horse Dummy - Can target Mountain Horse');
+
+-- 68908 Rope in Horse
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=17 AND `SourceEntry`=68908;
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry`, `SourceId`, `ElseGroup`, `ConditionTypeOrReference`, `ConditionTarget`, `ConditionValue1`, `ConditionValue2`, `ConditionValue3`, `NegativeCondition`, `ErrorType`, `ErrorTextId`, `ScriptName`, `Comment`) VALUES
+(17, 0, 68908, 0, 0, 31, 1, 3, 36540, 0, 0, 0, 0, '', 'should target only Mountain Horse');
+
+ -- Mountain Horse smart ai
+SET @ENTRY := 36540;
+UPDATE `creature_template` SET `AIName` = 'SmartAI', `ScriptName` = '' WHERE `entry` = @ENTRY;
+DELETE FROM `smart_scripts` WHERE `source_type` = 0 AND `entryOrGuid` = @ENTRY;
+INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES
+(@ENTRY, 0, 0, 0, 8, 0, 100, 0, 68903, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 'On spell  Round Up Horse (68903) hit - Self: Despawn instantly');
+
+ -- Mountain Horse smart ai
+SET @ENTRY := 36555;
+UPDATE `creature_template` SET `AIName` = 'SmartAI', `ScriptName` = '' WHERE `entry` = @ENTRY;
+DELETE FROM `smart_scripts` WHERE `entryorguid`=@ENTRY AND `source_type`=0;
+INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `event_param5`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES
+(@ENTRY, 0, 0, 1, 54, 0, 100, 0, 0, 0, 0, 0, 0, 11, 68940, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 'Mountain Horse - On Just Summoned - Cast Rope Channel'),
+(@ENTRY, 0, 1, 2, 61, 0, 100, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 'Mountain Horse - On Just Summoned (linked) - set react state to passive'),
+(@ENTRY, 0, 2, 0, 61, 0, 100, 0, 0, 0, 0, 0, 0, 29, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 'Mountain Horse - On Just Summoned (linked) - follow invoker');
+
+UPDATE creature SET ScriptName='npc_gilneas_mountain_horse_qtrigger', phaseId=183, phaseGroup=0 WHERE guid=255604 AND id=35374;
+
+DELETE FROM `spell_script_names` WHERE `spell_id`=68916 AND `ScriptName`='spell_gilneas_mountain_horse_dummy';
+INSERT INTO `spell_script_names` (`spell_id`, `ScriptName`) VALUES
+(68916, 'spell_gilneas_mountain_horse_dummy');

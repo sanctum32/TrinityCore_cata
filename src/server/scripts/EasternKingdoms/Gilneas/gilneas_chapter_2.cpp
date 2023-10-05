@@ -482,6 +482,73 @@ private:
     bool _preparedDespawn;
 };
 
+// Quest 14416
+enum TheHungryEattin
+{
+    SPELL_ROPE_VISUAL           = 68940,
+    SPELL_MOUNTAIN_HORSE_DUMMY  = 68916,
+    SPELL_MOUNTAIN_HORSE_CREDIT = 68917,
+    NPC_MOUNTAIN_HORSE_CREDIT   = 36560,
+};
+
+struct npc_gilneas_mountain_horse_qtrigger : public PassiveAI
+{
+    npc_gilneas_mountain_horse_qtrigger(Creature* creature) : PassiveAI(creature),
+        castTimer(5500)
+    {
+    }
+
+    void UpdateAI(uint32 diff) override
+    {
+        if (castTimer <= diff)
+        {
+            DoCastSelf(SPELL_MOUNTAIN_HORSE_DUMMY, true);
+            castTimer = 5500;
+        }
+        else
+        {
+            castTimer -= diff;
+        }
+    }
+
+private:
+    uint32 castTimer;
+};
+
+// 68916 Mountain Horse Dummy
+class spell_gilneas_mountain_horse_dummy : public SpellScript
+{
+    void HandleDummy(SpellEffIndex /*effIndex*/)
+    {
+        if (Creature* horse = GetHitCreature())
+        {
+            if (Unit* owner = horse->GetCharmerOrOwner())
+            {
+                owner->RemoveAurasDueToSpell(SPELL_ROPE_VISUAL);
+            }
+
+            horse->CastSpell(horse, SPELL_MOUNTAIN_HORSE_CREDIT);
+
+            if (Vehicle* pVehicle = horse->GetVehicleKit())
+            {
+                pVehicle->RemoveAllPassengers();
+            }
+
+            MotionMaster* motion = horse->GetMotionMaster();
+            motion->Clear();
+            motion->MoveIdle();
+
+            horse->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_SPELLCLICK);
+            horse->DespawnOrUnsummon(5s);
+        }
+    }
+
+    void Register()
+    {
+        OnEffectHitTarget.Register(&spell_gilneas_mountain_horse_dummy::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
+    }
+};
+
 class spell_gilneas_launch : public SpellScript
 {
     void TransferDestination(SpellEffIndex /*effIndex*/)
@@ -702,6 +769,8 @@ void AddSC_gilneas_chapter_2()
     RegisterCreatureAI(npc_gilneas_horrid_abomination);
     RegisterCreatureAI(npc_gilneas_save_the_children);
     RegisterCreatureAI(npc_gilneas_forsaken_catapult);
+    RegisterCreatureAI(npc_gilneas_mountain_horse_qtrigger);
+    RegisterSpellScript(spell_gilneas_mountain_horse_dummy);
     RegisterSpellScript(spell_gilneas_quest_save_the_children);
     RegisterSpellScript(spell_gilneas_launch);
     RegisterSpellScript(spell_gilneas_fiery_boulder);
