@@ -11,7 +11,7 @@ INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`,
 
 DELETE FROM `quest_request_items` WHERE `ID` = 14098;
 INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
-(14098, 0, 0, 'Have you succeeded, $n?', 0);
+(14098, 0, 0, 'Have you succeeded, $N?', 0);
 
 DELETE FROM `quest_request_items` WHERE `ID` = 14266;
 INSERT INTO `quest_request_items` (`ID`, `EmoteOnComplete`, `EmoteOnIncomplete`, `CompletionText`, `VerifiedBuild`) VALUES
