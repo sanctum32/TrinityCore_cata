@@ -666,6 +666,30 @@ private:
     EventMap _events;
 };
 
+// 67869 Knocking
+class spell_q14098_knocking_67869 : public SpellScript
+{
+    bool Validate(SpellInfo const* spellInfo) override
+    {
+        return ValidateSpellInfo(
+        {
+            static_cast<uint32>(spellInfo->Effects[EFFECT_1].CalcValue()),
+            static_cast<uint32>(spellInfo->Effects[EFFECT_2].CalcValue())
+        });
+    }
+
+    void HandleEffect()
+    {
+        if (SpellInfo const* spellInfo = GetSpellInfo())
+            GetCaster()->CastSpell(GetCaster(), static_cast<uint32>(spellInfo->Effects[RAND(0, 1) == 0 ? EFFECT_1 : EFFECT_2].CalcValue()), true);
+    }
+
+    void Register() override
+    {
+        OnCast.Register(&spell_q14098_knocking_67869::HandleEffect);
+    }
+};
+
 void AddSC_gilneas_chapter_1()
 {
     RegisterCreatureAI(npc_frightened_citizen);
@@ -674,4 +698,5 @@ void AddSC_gilneas_chapter_1()
     RegisterCreatureAI(npc_greymanes_horse);
     RegisterCreatureAI(npc_crowleys_horse);
     RegisterCreatureAI(npc_gilnean_crow);
+    RegisterSpellScript(spell_q14098_knocking_67869);
 }
