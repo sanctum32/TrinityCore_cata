@@ -141,9 +141,6 @@ INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry
 -- Drowning Watchman - should be spell clickable
 UPDATE `creature_template` SET `npcflag` = `npcflag` | 16777216 WHERE `entry` = 36440;
 
--- TODO: need to confirm
-UPDATE `quest_template` SET `Flags` = `Flags`|65536 WHERE `ID` = 14375;
-
 -- Quest chains
 UPDATE `quest_template_addon` SET `PrevQuestID` = 14397 WHERE `ID` = 14403;
 UPDATE `quest_template_addon` SET `PrevQuestID` = 14397 WHERE `ID` = 14398;
@@ -225,3 +222,19 @@ DELETE FROM `spell_script_names` WHERE `spell_id`=68916 AND `ScriptName`='spell_
 INSERT INTO `spell_script_names` (`spell_id`, `ScriptName`) VALUES
 (68916, 'spell_gilneas_mountain_horse_dummy');
 
+-- -------------------------
+-- Last Chance at Humanity
+-- -------------------------
+
+-- TODO: need to confirm
+-- UPDATE `quest_template` SET `Flags` = `Flags`|65536 WHERE `ID` = 14375;
+
+DELETE FROM `smart_scripts` WHERE `entryorguid`=3633000 AND `source_type`=9 AND `id`=0 AND `link`=0;
+INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `event_param5`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES
+(3633000, 9, 0, 0, 0, 0, 100, 0, 1200, 1200, 0, 0, 0, 59, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 'Set Walk'),
+(3633000, 9, 1, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 69, 1, 0, 0, 0, 0, 0, 8, 0, 0, 0, -1840.08, 2293.04, 42.53, 0, 'Move to Pos'),
+(3633000, 9, 2, 0, 0, 0, 100, 0, 5300, 5300, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 'Say Text');
+DELETE FROM `smart_scripts` WHERE `entryorguid`=36330 AND `source_type`=0 AND `id`=2 AND `link`=0;
+INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `event_param5`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES
+(36330, 0, 2, 0, 34, 0, 100, 0, 8, 1, 0, 0, 0, 69, 2, 0, 0, 0, 0, 0, 8, 0, 0, 0, -1821.92, 2295.05, 42.1705, 0, 'On Movement Inform - move to position');
+DELETE FROM waypoints WHERE entry = 36330;
