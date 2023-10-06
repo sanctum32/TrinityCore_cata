@@ -163,12 +163,14 @@ DELETE FROM `conditions` WHERE (`SourceTypeOrReferenceId` = 15) AND (`SourceGrou
 UPDATE `gameobject` SET `PhaseId`=183 WHERE  `guid`=236357 AND `id`=196472;
 
 -- Hunter trainer - Gilneas city
+UPDATE `creature_trainer` SET `MenuID`=10697, `OptionID`=1 WHERE  `CreatureID`=44461 AND `MenuID`=0 AND `OptionID`=3;
 UPDATE `creature_trainer` SET `MenuID`=10697, `OptionID`=1 WHERE  `CreatureID`=35874 AND `MenuID`=0 AND `OptionID`=3;
 DELETE FROM `gossip_menu_option` WHERE `MenuID`=10697 AND `OptionID`=1;
 INSERT INTO `gossip_menu_option` (`MenuID`, `OptionID`, `OptionIcon`, `OptionText`, `OptionBroadcastTextID`, `OptionType`, `OptionNpcflag`, `ActionMenuID`, `ActionPoiID`, `BoxCoded`, `BoxMoney`, `BoxText`, `BoxBroadcastTextID`, `VerifiedBuild`) VALUES
 (10697, 1, 3, 'Train me!', 3266, 5, 16, 0, 0, 0, 0, NULL, 0, 0);
 
 -- Rogue trainer - Gilneas city
+UPDATE `creature_trainer` SET `MenuID`=10699, `OptionID`=1 WHERE  `CreatureID`=44464 AND `MenuID`=0 AND `OptionID`=3;
 UPDATE `creature_trainer` SET `MenuID`=10699, `OptionID`=1 WHERE `CreatureID`=35871 AND `MenuID`=0 AND `OptionID`=3;
 DELETE FROM `gossip_menu_option` WHERE `MenuID`=10699 AND `OptionID`=1;
 INSERT INTO `gossip_menu_option` (`MenuID`, `OptionID`, `OptionIcon`, `OptionText`, `OptionBroadcastTextID`, `OptionType`, `OptionNpcflag`, `ActionMenuID`, `ActionPoiID`, `BoxCoded`, `BoxMoney`, `BoxText`, `BoxBroadcastTextID`, `VerifiedBuild`) VALUES
@@ -178,13 +180,14 @@ INSERT INTO `gossip_menu_option` (`MenuID`, `OptionID`, `OptionIcon`, `OptionTex
 DELETE FROM `gossip_menu_option` WHERE  `MenuID`=10698 AND `OptionID`=1;
 
 -- Warlock trainer - Gilneas city
+UPDATE `creature_trainer` SET `MenuID`=10702, `OptionID`=1 WHERE  `CreatureID`=44469 AND `MenuID`=0 AND `OptionID`=3;
 UPDATE `creature_trainer` SET `MenuID`=10702, `OptionID`=1 WHERE  `CreatureID`=35869 AND `MenuID`=0 AND `OptionID`=3;
 DELETE FROM `gossip_menu_option` WHERE `MenuID`=10702 AND `OptionID`=1;
 INSERT INTO `gossip_menu_option` (`MenuID`, `OptionID`, `OptionIcon`, `OptionText`, `OptionBroadcastTextID`, `OptionType`, `OptionNpcflag`, `ActionMenuID`, `ActionPoiID`, `BoxCoded`, `BoxMoney`, `BoxText`, `BoxBroadcastTextID`, `VerifiedBuild`) VALUES
 (10702, 1, 3, 'Train me!', 3266, 5, 16, 0, 0, 0, 0, NULL, 0, 0);
 
--- 14463,
--- 14402 <- set
+UPDATE creature_template SET AIName='', ScriptName='npc_lorna_crowley_gilneas_p1' WHERE entry=35378;
+
 -- ---------------------
 -- Quest 14416
 -- ---------------------
@@ -221,3 +224,4 @@ UPDATE creature SET ScriptName='npc_gilneas_mountain_horse_qtrigger', phaseId=18
 DELETE FROM `spell_script_names` WHERE `spell_id`=68916 AND `ScriptName`='spell_gilneas_mountain_horse_dummy';
 INSERT INTO `spell_script_names` (`spell_id`, `ScriptName`) VALUES
 (68916, 'spell_gilneas_mountain_horse_dummy');
+
