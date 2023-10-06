@@ -225,9 +225,8 @@ INSERT INTO `spell_script_names` (`spell_id`, `ScriptName`) VALUES
 -- -------------------------
 -- Last Chance at Humanity
 -- -------------------------
-
 -- Quest should instantly point to reward window
-UPDATE quest_template set flags=flags|0x00040000 WHERE id=14375;
+-- UPDATE quest_template set flags=0x00000008|0x00040000 WHERE id=14375;
 
 -- Quest giver flag should be added in timed action
 UPDATE creature_template SET npcflag=npcflag &~ 2 WHERE entry=36332;
@@ -241,3 +240,17 @@ DELETE FROM `smart_scripts` WHERE `entryorguid`=36330 AND `source_type`=0 AND `i
 INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `event_param5`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES
 (36330, 0, 2, 0, 34, 0, 100, 0, 8, 1, 0, 0, 0, 69, 2, 0, 0, 0, 0, 0, 8, 0, 0, 0, -1821.92, 2295.05, 42.1705, 0, 'On Movement Inform - move to position');
 DELETE FROM waypoints WHERE entry = 36330;
+
+-- Rogue trainer
+DELETE FROM `gossip_menu_option` WHERE `MenuID`=10843 AND `OptionID`=1;
+INSERT INTO `gossip_menu_option` (`MenuID`, `OptionID`, `OptionIcon`, `OptionText`, `OptionBroadcastTextID`, `OptionType`, `OptionNpcflag`, `ActionMenuID`, `ActionPoiID`, `BoxCoded`, `BoxMoney`, `BoxText`, `BoxBroadcastTextID`, `VerifiedBuild`) VALUES
+(10843, 1, 3, 'Train me!', 3266, 5, 16, 0, 0, 0, 0, NULL, 0, 0);
+DELETE FROM `creature_trainer` WHERE `CreatureID`=36630 AND `MenuID`=10843 AND `OptionID`=1;
+INSERT INTO `creature_trainer` (`CreatureID`, `TrainerID`, `MenuID`, `OptionID`) VALUES
+(36630, 33, 10843, 1);
+
+-- Warlock trainer
+UPDATE `creature_trainer` SET `MenuID`=10840, `OptionID`=1 WHERE  `CreatureID`=36652 AND `MenuID`=0 AND `OptionID`=3;
+DELETE FROM `gossip_menu_option` WHERE `MenuID`=10840 AND `OptionID`=1;
+INSERT INTO `gossip_menu_option` (`MenuID`, `OptionID`, `OptionIcon`, `OptionText`, `OptionBroadcastTextID`, `OptionType`, `OptionNpcflag`, `ActionMenuID`, `ActionPoiID`, `BoxCoded`, `BoxMoney`, `BoxText`, `BoxBroadcastTextID`, `VerifiedBuild`) VALUES
+(10840, 1, 3, 'Train me!', 3266, 5, 16, 0, 0, 0, 0, NULL, 0, 0);
