@@ -28,6 +28,7 @@
 #include "SpellScript.h"
 #include "TemporarySummon.h"
 #include "Vehicle.h"
+#include <iostream>
 
 /*######
 ## Quest 14098 - Evacuate the Merchant Square
@@ -317,25 +318,47 @@ enum TheRebelLordsArsena
 
     SPELL_SHOOT_INSTAKILL   = 67593,
     SPELL_COSMETIC_ATTACK   = 42880,
-    SPELL_PULL_TO           = 67357,
-
-    EVENT_COSMETIC_ATTACK   = 1,
-    EVENT_JUMP_TO_PLAYER,
-    EVENT_SHOOT_JOSIAH
+    SPELL_PULL_TO           = 67357
 };
 
 static Position const JosiahJumpPos = { -1796.63f, 1427.73f, 12.4624f };
 
 struct npc_josiah_avery : public PassiveAI
 {
-    npc_josiah_avery(Creature* creature) : PassiveAI(creature) { }
-
-    void IsSummonedBy(Unit* summoner) override
+    npc_josiah_avery(Creature* creature) : PassiveAI(creature)
     {
         PhasingHandler::AddPhase(me, PHASE_ID_SUMMON, true);
         PhasingHandler::AddPhase(me, PHASE_ID_WOUND, true);
-        _playerGuid = summoner->GetGUID();
-        _events.ScheduleEvent(EVENT_COSMETIC_ATTACK, 500ms);
+    }
+
+    void IsSummonedBy(Unit* summoner) override
+    {
+        scheduler
+            .Schedule(500ms, [this, summonerGUID = summoner->GetGUID()](TaskContext const& /*task*/)
+            {
+                if (Player* player = ObjectAccessor::GetPlayer(*me, summonerGUID))
+                {
+                    DoCast(player, SPELL_COSMETIC_ATTACK);
+
+                    if (Creature* lorna = me->FindNearestCreature(NPC_LORNA_CROWLEY, 30.0f, true))
+                    {
+                        if (Creature* labTrigger = lorna->FindNearestCreature(NPC_GENERIC_TRIGGER_LAB, 5.0f, true))
+                            labTrigger->CastSpell(player, SPELL_PULL_TO);
+                    }
+                }
+            })
+            .Schedule(1500ms, [this](TaskContext const& /*task*/)
+            {
+                me->GetMotionMaster()->MoveJump(JosiahJumpPos, 15.0f, 14.18636f);
+            })
+            .Schedule(1650ms, [this](TaskContext const& /*task*/)
+            {
+                if (Creature* lorna = me->FindNearestCreature(NPC_LORNA_CROWLEY, 30.0f, true))
+                {
+                    lorna->CastSpell(me, SPELL_SHOOT_INSTAKILL, TRIGGERED_IGNORE_TARGET_CHECK);
+                    me->KillSelf(); // Hack, npc should die on SPELL_SHOOT_INSTAKILL hit
+                }
+            });
     }
 
     void JustDied(Unit* /*killer*/) override
@@ -345,39 +368,11 @@ struct npc_josiah_avery : public PassiveAI
 
     void UpdateAI(uint32 diff) override
     {
-        _events.Update(diff);
-
-        while (uint32 eventId = _events.ExecuteEvent())
-        {
-            switch (eventId)
-            {
-                case EVENT_COSMETIC_ATTACK:
-                    if (Player* player = ObjectAccessor::GetPlayer(*me, _playerGuid))
-                    {
-                        DoCast(player, SPELL_COSMETIC_ATTACK);
-                        if (Creature* lorna = me->FindNearestCreature(NPC_LORNA_CROWLEY, 30.0f, true))
-                            if (Creature* labTrigger = lorna->FindNearestCreature(NPC_GENERIC_TRIGGER_LAB, 5.0f, true))
-                                labTrigger->CastSpell(player, SPELL_PULL_TO);
-
-                        _events.ScheduleEvent(EVENT_JUMP_TO_PLAYER, 1s);
-                    }
-                    break;
-                case EVENT_JUMP_TO_PLAYER:
-                    me->GetMotionMaster()->MoveJump(JosiahJumpPos, 10.0f, 14.18636f);
-                    _events.ScheduleEvent(EVENT_SHOOT_JOSIAH, 500ms);
-                    break;
-                case EVENT_SHOOT_JOSIAH:
-                    if (Creature* lorna = me->FindNearestCreature(NPC_LORNA_CROWLEY, 30.0f, true))
-                        lorna->CastSpell(me, SPELL_SHOOT_INSTAKILL, true);
-                    break;
-                default:
-                    break;
-            }
-        }
+        scheduler.Update(diff);
     }
+
 private:
-    ObjectGuid _playerGuid;
-    EventMap _events;
+    TaskScheduler scheduler;
 };
 
 /*######
