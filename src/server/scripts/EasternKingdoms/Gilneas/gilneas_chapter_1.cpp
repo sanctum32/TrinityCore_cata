@@ -19,6 +19,7 @@
 #include "ScriptMgr.h"
 #include "CombatAI.h"
 #include "MotionMaster.h"
+#include "MoveSplineInit.h"
 #include "ObjectAccessor.h"
 #include "Player.h"
 #include "PassiveAI.h"
@@ -327,12 +328,14 @@ struct npc_josiah_avery : public PassiveAI
 {
     npc_josiah_avery(Creature* creature) : PassiveAI(creature)
     {
-        PhasingHandler::AddPhase(me, PHASE_ID_SUMMON, true);
-        PhasingHandler::AddPhase(me, PHASE_ID_WOUND, true);
     }
 
     void IsSummonedBy(Unit* summoner) override
     {
+        PhasingHandler::AddPhase(me, PHASE_ID_SUMMON, true);
+        PhasingHandler::AddPhase(me, PHASE_ID_WOUND, true);
+        me->SetPrivateObjectOwner(ObjectGuid::Empty);
+
         scheduler
             .Schedule(500ms, [this, summonerGUID = summoner->GetGUID()](TaskContext const& /*task*/)
             {
@@ -350,20 +353,21 @@ struct npc_josiah_avery : public PassiveAI
             .Schedule(1500ms, [this](TaskContext const& /*task*/)
             {
                 me->GetMotionMaster()->MoveJump(JosiahJumpPos, 15.0f, 14.18636f);
-            })
-            .Schedule(1650ms, [this](TaskContext const& /*task*/)
-            {
                 if (Creature* lorna = me->FindNearestCreature(NPC_LORNA_CROWLEY, 30.0f, true))
                 {
-                    lorna->CastSpell(me, SPELL_SHOOT_INSTAKILL, TRIGGERED_IGNORE_TARGET_CHECK);
-                    me->KillSelf(); // Hack, npc should die on SPELL_SHOOT_INSTAKILL hit
+                    lorna->CastSpell(me, SPELL_SHOOT_INSTAKILL);
                 }
             });
     }
 
     void JustDied(Unit* /*killer*/) override
     {
-        me->DespawnOrUnsummon(5s);
+        Movement::MoveSplineInit init(me);
+        init.MoveTo(me->GetPositionX(), me->GetPositionY(), 12.461811f, false);
+        init.SetFall();
+        me->GetMotionMaster()->LaunchMoveSpline(std::move(init));
+
+        me->DespawnOrUnsummon(15s);
     }
 
     void UpdateAI(uint32 diff) override
