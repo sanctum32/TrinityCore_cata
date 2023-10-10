@@ -130,7 +130,12 @@ update `creature` SET `spawntimesecs`=180 where `id` IN
     36440,  -- Drowning Watchman
     36540,  -- Mountain Horse
     36397,  -- Captain Anson
-    36399   -- Captain Morris
+    36399,  -- Captain Morris
+    34511,  -- Forsaken Invader (had 1 min respawn)
+    36231,  -- Horrid Abomination (had 1 min respawn)
+    36396,  -- Forsaken Sailor
+    36236,  -- Forsaken Footsoldier
+    36460   -- Forsaken Survivor
 );
 
 -- Condition for spell "Toss Keg"(69094)
@@ -139,16 +144,17 @@ INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry
 (17, 0, 69094, 0, 0, 31, 1, 3, 36231, 0, 0, 'Should target only Horrid Abomination (36231)');
 
 -- Drowning Watchman - should be spell clickable
-UPDATE `creature_template` SET `npcflag` = `npcflag` | 16777216 WHERE `entry` = 36440;
+UPDATE `creature_template` SET `npcflag` = `npcflag` | 0x01000000 WHERE `entry` = 36440;
 
 -- Quest chains
 UPDATE `quest_template_addon` SET `PrevQuestID` = 14397 WHERE `ID` = 14403;
 UPDATE `quest_template_addon` SET `PrevQuestID` = 14397 WHERE `ID` = 14398;
 UPDATE `quest_template_addon` SET `PrevQuestID` = 14397 /*, `ExclusiveGroup` = 0*/ WHERE `ID` = 14406;
 UPDATE `quest_template_addon` SET `PrevQuestID` = 14416 WHERE `ID` = 14463;
-UPDATE `quest_template_addon` SET `PrevQuestID` = 14400/*, `ExclusiveGroup` = 0*/ WHERE `ID` = 14401;
+UPDATE `quest_template_addon` SET `PrevQuestID` = 14400, `ExclusiveGroup` = 0 WHERE `ID` = 14401;
 UPDATE `quest_template_addon` SET `ExclusiveGroup` = 0 WHERE `ID` = 14465;
 UPDATE `quest_template_addon` SET `PrevQuestID` = 14401 WHERE `ID` = 14402;
+UPDATE `quest_template_addon` SET `PrevQuestID` = 14406 WHERE `ID` = 14416;
 
 -- Duplicate warrior trainer gossip
 DELETE FROM `gossip_menu_option` WHERE `MenuID` = 10694;
@@ -183,12 +189,30 @@ DELETE FROM `gossip_menu_option` WHERE `MenuID`=10702 AND `OptionID`=1;
 INSERT INTO `gossip_menu_option` (`MenuID`, `OptionID`, `OptionIcon`, `OptionText`, `OptionBroadcastTextID`, `OptionType`, `OptionNpcflag`, `ActionMenuID`, `ActionPoiID`, `BoxCoded`, `BoxMoney`, `BoxText`, `BoxBroadcastTextID`, `VerifiedBuild`) VALUES
 (10702, 1, 3, 'Train me!', 3266, 5, 16, 0, 0, 0, 0, NULL, 0, 0);
 
-UPDATE creature_template SET AIName='', ScriptName='npc_lorna_crowley_gilneas_p1' WHERE entry=35378;
+-- Duplicate spawns
+delete from creature where id = 36440 AND guid IN (255801, 255806, 255822);
+
+-- Rogue trainer
+DELETE FROM `gossip_menu_option` WHERE `MenuID`=10843 AND `OptionID`=1;
+INSERT INTO `gossip_menu_option` (`MenuID`, `OptionID`, `OptionIcon`, `OptionText`, `OptionBroadcastTextID`, `OptionType`, `OptionNpcflag`, `ActionMenuID`, `ActionPoiID`, `BoxCoded`, `BoxMoney`, `BoxText`, `BoxBroadcastTextID`, `VerifiedBuild`) VALUES
+(10843, 1, 3, 'Train me!', 3266, 5, 16, 0, 0, 0, 0, NULL, 0, 0);
+DELETE FROM `creature_trainer` WHERE `CreatureID`=36630 AND `MenuID`=10843 AND `OptionID`=1;
+INSERT INTO `creature_trainer` (`CreatureID`, `TrainerID`, `MenuID`, `OptionID`) VALUES
+(36630, 33, 10843, 1);
+
+-- Warlock trainer
+UPDATE `creature_trainer` SET `MenuID`=10840, `OptionID`=1 WHERE  `CreatureID`=36652 AND `MenuID`=0 AND `OptionID`=3;
+DELETE FROM `gossip_menu_option` WHERE `MenuID`=10840 AND `OptionID`=1;
+INSERT INTO `gossip_menu_option` (`MenuID`, `OptionID`, `OptionIcon`, `OptionText`, `OptionBroadcastTextID`, `OptionType`, `OptionNpcflag`, `ActionMenuID`, `ActionPoiID`, `BoxCoded`, `BoxMoney`, `BoxText`, `BoxBroadcastTextID`, `VerifiedBuild`) VALUES
+(10840, 1, 3, 'Train me!', 3266, 5, 16, 0, 0, 0, 0, NULL, 0, 0);
+
+-- Chris Moller <Pie Vendor>
+UPDATE `gossip_menu_option` SET `OptionType`=1, `OptionNpcflag`=1 WHERE  `MenuID`=11794 AND `OptionID`=1;
+UPDATE `gossip_menu_option` SET `OptionType`=3, `OptionNpcflag`=128 WHERE  `MenuID`=11794 AND `OptionID`=0;
 
 -- ---------------------
 -- Quest 14416
 -- ---------------------
-
 -- 68916 Mountain Horse Dummy
 DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=13 AND `SourceGroup`=1 AND `SourceEntry`=68916;
 INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry`, `SourceId`, `ElseGroup`, `ConditionTypeOrReference`, `ConditionTarget`, `ConditionValue1`, `ConditionValue2`, `ConditionValue3`, `NegativeCondition`, `ErrorType`, `ErrorTextId`, `ScriptName`, `Comment`) VALUES
@@ -241,16 +265,50 @@ INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_
 (36330, 0, 2, 0, 34, 0, 100, 0, 8, 1, 0, 0, 0, 69, 2, 0, 0, 0, 0, 0, 8, 0, 0, 0, -1821.92, 2295.05, 42.1705, 0, 'On Movement Inform - move to position');
 DELETE FROM waypoints WHERE entry = 36330;
 
--- Rogue trainer
-DELETE FROM `gossip_menu_option` WHERE `MenuID`=10843 AND `OptionID`=1;
-INSERT INTO `gossip_menu_option` (`MenuID`, `OptionID`, `OptionIcon`, `OptionText`, `OptionBroadcastTextID`, `OptionType`, `OptionNpcflag`, `ActionMenuID`, `ActionPoiID`, `BoxCoded`, `BoxMoney`, `BoxText`, `BoxBroadcastTextID`, `VerifiedBuild`) VALUES
-(10843, 1, 3, 'Train me!', 3266, 5, 16, 0, 0, 0, 0, NULL, 0, 0);
-DELETE FROM `creature_trainer` WHERE `CreatureID`=36630 AND `MenuID`=10843 AND `OptionID`=1;
-INSERT INTO `creature_trainer` (`CreatureID`, `TrainerID`, `MenuID`, `OptionID`) VALUES
-(36630, 33, 10843, 1);
+-- ------------------------------
+-- Quest: Grandma's Cat 14401
+-- ------------------------------
+-- Chance - should be spell clickable
+UPDATE `creature_template` SET `npcflag` = `npcflag` | 0x01000000 WHERE `entry` = 36459;
 
--- Warlock trainer
-UPDATE `creature_trainer` SET `MenuID`=10840, `OptionID`=1 WHERE  `CreatureID`=36652 AND `MenuID`=0 AND `OptionID`=3;
-DELETE FROM `gossip_menu_option` WHERE `MenuID`=10840 AND `OptionID`=1;
-INSERT INTO `gossip_menu_option` (`MenuID`, `OptionID`, `OptionIcon`, `OptionText`, `OptionBroadcastTextID`, `OptionType`, `OptionNpcflag`, `ActionMenuID`, `ActionPoiID`, `BoxCoded`, `BoxMoney`, `BoxText`, `BoxBroadcastTextID`, `VerifiedBuild`) VALUES
-(10840, 1, 3, 'Train me!', 3266, 5, 16, 0, 0, 0, 0, NULL, 0, 0);
+DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=18 AND `SourceGroup`=36459 AND `SourceEntry`=68743 AND `SourceId`=0 AND `ElseGroup`=0 AND `ConditionTypeOrReference`=9 AND `ConditionTarget`=0 AND `ConditionValue1`=14401 AND `ConditionValue2`=0 AND `ConditionValue3`=0;
+INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry`, `SourceId`, `ElseGroup`, `ConditionTypeOrReference`, `ConditionTarget`, `ConditionValue1`, `ConditionValue2`, `ConditionValue3`, `NegativeCondition`, `ErrorType`, `ErrorTextId`, `ScriptName`, `Comment`) VALUES
+(18, 36459, 68743, 0, 0, 9, 0, 14401, 0, 0, 0, 0, 0, '', 'Should be clickable if quest "Grandma\'s Cat" is taken');
+
+DELETE FROM `spell_scripts` WHERE `id`=68743 AND `effIndex`=0;
+INSERT INTO `spell_scripts` (`id`, `effIndex`, `delay`, `command`, `datalong`, `datalong2`, `dataint`, `x`, `y`, `z`, `o`) VALUES
+(68743, 0, 0, 5, 77, 16777216, 0, 0, 0, 0, 0);
+
+-- Delete duplicate spawn of chance
+delete from creature where guid=255872 and id=36459;
+
+-- These spawns are going to be summoned by event script
+delete from creature where guid=255956 and id=36461;
+delete from creature where guid=255957 and id=36458;
+
+-- Setted "Chance" respawn time to 5 mins
+UPDATE `creature` SET `spawntimesecs`=300 WHERE `guid`=255958 AND id = 36459;
+
+DELETE FROM `event_scripts` WHERE `id`=22401;
+INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `dataint`, `x`, `y`, `z`, `o`) VALUES
+(22401, 0, 10, 36461, 300000, 0, -2111.533, 2329.9497, 7.3903494, 0.220381155610084533),
+(22401, 4, 10, 36458, 300000, 0, -2098.3665, 2352.0747, 7.1606426, 4.926180839538574218);
+
+-- Lucius
+update creature_template set AIName='SmartAI', ScriptName='' where entry=36461;
+DELETE FROM `smart_scripts` WHERE `entryorguid`=36461 AND `source_type`=0;
+INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `event_param5`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES
+(36461, 0, 0, 0, 54, 0, 100, 0, 0, 0, 0, 0, 0, 53, 1, 36461, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 'Lucius - On Just Summoned - start waypoint'),
+(36461, 0, 1, 2, 40, 0, 100, 0, 3, 36461, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 'Lucius - On Waypoint Reach - Say text'),
+(36461, 0, 2, 0, 61, 0, 100, 0, 0, 0, 0, 0, 0, 80, 3646100, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 'Lucius - On Waypoint Reach (linked) - trigger timed action list');
+DELETE FROM `smart_scripts` WHERE `entryorguid`=3646100 AND `source_type`=9;
+INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `event_param5`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES
+(3646100, 9, 0, 0, 0, 0, 100, 0, 4000, 4000, 0, 0, 0, 17, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 'Lucius - Set emote state to NONE'),
+(3646100, 9, 1, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 41, 0, 300, 0, 0, 0, 0, 10, 255958, 36459, 0, 0, 0, 0, 0, 'Lucius - Force despawn npc "Chance"'),
+(3646100, 9, 2, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 19, 256, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 'Lucius - remove unit flag'),
+(3646100, 9, 3, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 21, 10, 0, 0, 0, 0, 0, 0, 'Lucius - Attack nearest player');
+DELETE FROM `waypoints` WHERE `entry`=36461;
+INSERT INTO `waypoints` (`entry`, `pointid`, `position_x`, `position_y`, `position_z`, `orientation`, `velocity`, `delay`, `smoothTransition`, `point_comment`) VALUES
+(36461, 1, -2116.69, 2328.79, 7.49998, NULL, 0, 0, 0, NULL),
+(36461, 2, -2111.53, 2329.95, 7.39035, NULL, 0, 0, 0, NULL),
+(36461, 3, -2106.37, 2331.11, 7.28072, NULL, 0, 0, 0, NULL);
