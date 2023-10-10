@@ -1,3 +1,7 @@
+-- --------------------------------------
+-- WARNING! this still is in development and is not ready for final usage!
+-- --------------------------------------
+
 -- Added rain weather to Gilneas City
 -- Proof: https://youtu.be/1IW4f1mhEy0?si=HIc30howbymeSA9-&t=606
 DELETE FROM `game_weather` WHERE `zone`=4755;
