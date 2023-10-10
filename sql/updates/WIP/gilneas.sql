@@ -251,23 +251,13 @@ INSERT INTO `spell_script_names` (`spell_id`, `ScriptName`) VALUES
 (68916, 'spell_gilneas_mountain_horse_dummy');
 
 -- -------------------------
--- Last Chance at Humanity
+-- Last Chance at Humanity 14375
 -- -------------------------
 -- Quest should instantly point to reward window
 -- UPDATE quest_template set flags=0x00000008|0x00040000 WHERE id=14375;
 
 -- Quest giver flag should be added in timed action
 UPDATE creature_template SET npcflag=npcflag &~ 2 WHERE entry=36332;
-
-DELETE FROM `smart_scripts` WHERE `entryorguid`=3633000 AND `source_type`=9;
-INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `event_param5`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES
-(3633000, 9, 0, 0, 0, 0, 100, 0, 1200, 1200, 0, 0, 0, 59, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 'Set Walk'),
-(3633000, 9, 1, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 69, 1, 0, 0, 0, 0, 0, 8, 0, 0, 0, -1840.08, 2293.04, 42.53, 0, 'Move to Pos'),
-(3633000, 9, 2, 0, 0, 0, 100, 0, 5300, 5300, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 'Say Text');
-DELETE FROM `smart_scripts` WHERE `entryorguid`=36330 AND `source_type`=0 AND `id`=2 AND `link`=0;
-INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `event_param5`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES
-(36330, 0, 2, 0, 34, 0, 100, 0, 8, 1, 0, 0, 0, 69, 2, 0, 0, 0, 0, 0, 8, 0, 0, 0, -1821.92, 2295.05, 42.1705, 0, 'On Movement Inform - move to position');
-DELETE FROM waypoints WHERE entry = 36330;
 
 -- ------------------------------
 -- Quest: Grandma's Cat 14401
@@ -303,7 +293,7 @@ update creature_template set AIName='SmartAI', ScriptName='' where entry=36461;
 DELETE FROM `smart_scripts` WHERE `entryorguid`=36461 AND `source_type`=0;
 INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `event_param5`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES
 (36461, 0, 0, 0, 54, 0, 100, 0, 0, 0, 0, 0, 0, 53, 1, 36461, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0, 'Lucius - On Just Summoned - start waypoint'),
-(36461, 0, 1, 2, 40, 0, 100, 0, 3, 36461, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 'Lucius - On Waypoint Reach - Say text'),
+(36461, 0, 1, 2, 40, 0, 100, 0, 2, 36461, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 'Lucius - On Waypoint Reach - Say text'),
 (36461, 0, 2, 0, 61, 0, 100, 0, 0, 0, 0, 0, 0, 80, 3646100, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 'Lucius - On Waypoint Reach (linked) - trigger timed action list');
 DELETE FROM `smart_scripts` WHERE `entryorguid`=3646100 AND `source_type`=9;
 INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_type`, `event_phase_mask`, `event_chance`, `event_flags`, `event_param1`, `event_param2`, `event_param3`, `event_param4`, `event_param5`, `action_type`, `action_param1`, `action_param2`, `action_param3`, `action_param4`, `action_param5`, `action_param6`, `target_type`, `target_param1`, `target_param2`, `target_param3`, `target_x`, `target_y`, `target_z`, `target_o`, `comment`) VALUES
@@ -313,6 +303,6 @@ INSERT INTO `smart_scripts` (`entryorguid`, `source_type`, `id`, `link`, `event_
 (3646100, 9, 3, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 49, 0, 0, 0, 0, 0, 0, 21, 10, 0, 0, 0, 0, 0, 0, 'Lucius - Attack nearest player');
 DELETE FROM `waypoints` WHERE `entry`=36461;
 INSERT INTO `waypoints` (`entry`, `pointid`, `position_x`, `position_y`, `position_z`, `orientation`, `velocity`, `delay`, `smoothTransition`, `point_comment`) VALUES
-(36461, 1, -2116.69, 2328.79, 7.49998, NULL, 0, 0, 0, NULL),
-(36461, 2, -2111.53, 2329.95, 7.39035, NULL, 0, 0, 0, NULL),
-(36461, 3, -2106.37, 2331.11, 7.28072, NULL, 0, 0, 0, NULL);
+(36461, 0, -2116.69, 2328.79, 7.49998, NULL, 0, 0, 0, NULL),
+(36461, 1, -2111.53, 2329.95, 7.39035, NULL, 0, 0, 0, NULL),
+(36461, 2, -2106.37, 2331.11, 7.28072, NULL, 0, 0, 0, NULL);
