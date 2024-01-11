@@ -32,6 +32,8 @@
 #include "SpellScript.h"
 #include "Vehicle.h"
 
+namespace Spells::Quests
+{
 class spell_generic_quest_update_entry_SpellScript : public SpellScript
 {
     private:
@@ -2702,8 +2704,44 @@ public:
     }
 };
 
+class spell_q14098_knocking_67869 : public SpellScriptLoader
+{
+public:
+    spell_q14098_knocking_67869() : SpellScriptLoader("spell_q14098_knocking_67869") { }
+
+    class spell_q14098_knocking_67869_SpellScript : public SpellScript
+    {
+             bool Validate(SpellInfo const* spellInfo) override
+        {
+            return ValidateSpellInfo(
+                {
+                    uint32(spellInfo->Effects[EFFECT_1].BasePoints),
+                    uint32(spellInfo->Effects[EFFECT_2].BasePoints)
+                });
+        }
+
+        void HandleEffect()
+        {
+            if (SpellInfo const* spellInfo = GetSpellInfo())
+                GetCaster()->CastSpell(GetCaster(), spellInfo->Effects[RAND(0, 1) == 0 ? EFFECT_1 : EFFECT_2].BasePoints, true);
+        }
+
+        void Register() override
+        {
+            OnCast.Register(&spell_q14098_knocking_67869_SpellScript::HandleEffect);
+        }
+    };
+
+    SpellScript* GetSpellScript() const override
+    {
+        return new spell_q14098_knocking_67869_SpellScript();
+    }
+};
+}
+
 void AddSC_quest_spell_scripts()
 {
+    using namespace Spells::Quests;
     new spell_q55_sacred_cleansing();
     new spell_q2203_thaumaturgy_channel();
     new spell_q5206_test_fetid_skull();
